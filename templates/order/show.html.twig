@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande {{ order.reference }} - MiniShop{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_home') }}">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_order_index') }}">Mes commandes</a></li>
+            <li class="breadcrumb-item active">{{ order.reference }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Commande {{ order.reference }}</h5>
+                    <span class="badge {{ order.statusBadgeClass }}">{{ order.statusLabel }}</span>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Produit</th>
+                                <th>Prix unitaire</th>
+                                <th>Quantité</th>
+                                <th>Sous-total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in order.items %}
+                                <tr>
+                                    <td>{{ item.product.name }}</td>
+                                    <td>{{ item.unitPrice }} &euro;</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td class="fw-bold">{{ item.total|number_format(2, '.', ',') }} &euro;</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr class="table-light">
+                                <td colspan="3" class="text-end fw-bold fs-5">Total :</td>
+                                <td class="fw-bold fs-5 text-primary">{{ order.totalAmount }} &euro;</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card mb-3">
+                <div class="card-header"><i class="bi bi-info-circle"></i> Informations</div>
+                <div class="card-body">
+                    <p><strong>Date :</strong> {{ order.createdAt|date('d/m/Y à H:i') }}</p>
+                    <p><strong>Statut :</strong> <span class="badge {{ order.statusBadgeClass }}">{{ order.statusLabel }}</span></p>
+                    <p><strong>Total :</strong> {{ order.totalAmount }} &euro;</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><i class="bi bi-truck"></i> Adresse de livraison</div>
+                <div class="card-body">
+                    <p>{{ order.shippingAddress|nl2br }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

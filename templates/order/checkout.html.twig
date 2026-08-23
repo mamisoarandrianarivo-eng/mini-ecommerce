@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Passer commande - MiniShop{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h1><i class="bi bi-credit-card"></i> Passer commande</h1>
+    <hr>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Récapitulatif de la commande</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Produit</th>
+                                <th>Quantité</th>
+                                <th>Prix</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in items %}
+                                <tr>
+                                    <td>{{ item.product.name }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>{{ (item.product.price * item.quantity)|number_format(2, '.', ',') }} &euro;</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr class="table-light">
+                                <td colspan="2" class="text-end fw-bold">Total :</td>
+                                <td class="fw-bold text-primary">{{ total|number_format(2, '.', ',') }} &euro;</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="bi bi-truck"></i> Adresse de livraison</h5>
+                </div>
+                <div class="card-body">
+                    <form action="{{ path('app_order_checkout') }}" method="post">
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Adresse complète</label>
+                            <textarea name="address" id="address" class="form-control" rows="4" required placeholder="Votre adresse de livraison...">{{ app.user.address }}</textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="bi bi-check-circle"></i> Confirmer la commande
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <a href="{{ path('app_cart_index') }}" class="btn btn-outline-secondary mt-3 w-100">
+                <i class="bi bi-arrow-left"></i> Retour au panier
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
